@@ -16,11 +16,29 @@
     clone.style.backgroundColor = 'transparent'
     clone.style.color = '#39f'
 
-    var url = `https://leetcode.com${window.location.pathname.replace('/submissions/', '/discuss/')}`
-
     var a = clone.querySelector('a')
-    a.href = url
+    a.href = getQuestionUrl()
     a.target = '_blank'
+
+    var _wr = function (type) {
+        var orig = history[type];
+        return function () {
+            var rv = orig.apply(this, arguments);
+            var e = new Event(type);
+            e.arguments = arguments;
+            window.dispatchEvent(e);
+            return rv;
+        };
+    };
+    history.pushState = _wr('pushState');
+    function getQuestionUrl() {
+        const path = window.location.pathname.split('/')
+        return `https://leetcode.com/${path[1]}/${path[2]}/discuss`
+    }
+
+    window.addEventListener('pushState', e => {
+        a.href = getQuestionUrl()
+    })
 
     clone.querySelector('span div').innerHTML = '讨论'
     item.parentNode.appendChild(clone)
