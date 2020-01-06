@@ -39,6 +39,9 @@
     window.addEventListener('pushState', e => {
         a.href = getQuestionUrl()
     })
+    window.addEventListener('popstate', e => {
+        a.href = getQuestionUrl()
+    })
 
     clone.querySelector('span div').innerHTML = '讨论'
     item.parentNode.appendChild(clone)
